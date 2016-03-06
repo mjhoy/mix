@@ -1,0 +1,46 @@
+* Program M: find the maximum
+*
+* Register assignments:
+*   rA   = m
+*   rI1  = n
+*   rI2  = j
+*   rI3  = k
+*   X[i] = CONTENTS(x+i)
+*
+* label op      address   times  comment
+X       EQU     1000
+        ORIG    3000             start address
+MAXIMUM STJ     EXIT      1      subroutine linkage
+INIT    ENT3    0,1       1      M1. Initialize. k <- n
+        JMP     CHANGEM   1      j <- n, m <- X[n], k <- n <- 1.
+LOOP    CMPA    X,3       n-1    M3. Compare.
+        JGE     *+3       n-1    To M5 if m >= X[k].
+CHANGEM ENT2    0,3       A+1    M4. Change m. j <- k.
+        LDA     X,3       A+1    m <- X[k]
+        DEC3    1         n      M5. Decrease k.
+        J3P     LOOP      n      M2. All tested? To M3 if k > 0.
+EXIT    JMP     *         1      Return to main program.
+
+* testing... we will sort these numbers...
+
+        ORIG    X
+        CON     10
+        CON     15
+        CON     7
+        CON     9
+        CON     24
+        CON     26
+        CON     3
+
+
+        ORIG    EXIT+1
+START   ENT1    7
+        JMP     MAXIMUM
+        CHAR
+        STA     MAX
+        STX     MAX1
+        OUT     MAX(19)
+        HLT
+MAX     NOP
+MAX1    NOP
+        END     START
